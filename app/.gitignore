@@ -1,6 +1,3 @@
-# Old files
-Old/
-
 # Python
 __pycache__/
 *.pyc
@@ -14,8 +11,6 @@ __pycache__/
 # Dataset
 chest_xray/
 
-# Test images
-test_images/
 
 # IDE
 .vscode/
@@ -24,3 +19,6 @@ test_images/
 # OS
 .DS_Store
 Thumbs.db
+
+# Kaggle
+kaggle.json
