@@ -30,8 +30,7 @@ app/model/chest_xray/chest_xray/
 ## 3. Download Pre-trained Model Weights
 
 Download the pre-trained DenseNet121 model weights:
-https://drive.google.com/file/d/1xeBS5xd0mklC3b0c0v1j0E4U2kgvmb/view
-
+https://drive.google.com/file/d/1xeBS5UDkdL99Xeqm12wx-j0E4U2kgvmb/view?usp=sharing
 Save as: `app/model/DenseNet121model_prototype.pth`
 
 ## 4. Run the API (Local)
@@ -43,7 +42,7 @@ uvicorn main:app --reload
 
 Then open http://localhost:8000 in your browser.
 
-## 5. Run with Docker
+## 5. Run with Docker (Still testing this)
 
 ### Build the image:
 ```bash
