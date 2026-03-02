@@ -1,34 +1,44 @@
-# Deploy ML models with FastAPI, Docker, and Heroku
+# Setup
 
-### 1. Develop and save the model with this Colab
+## 1. Install Python Dependencies
 
-[Open Colab](https://colab.research.google.com/drive/1uaALcaatvxOu42IhQA4r0bahfdpw-Z7v?usp=sharing)
-
-### 2. Create Docker container
+Run this command to install all required libraries:
 
 ```bash
-docker build -t app-name .
-
-docker run -p 80:80 app-name
+pip install torch torchvision numpy fastapi uvicorn Pillow opencv-python scikit-learn
 ```
 
-### 3. Create Git repo
-
-If you clone this repo this step is not needed. Or you can delete this git repo with `rm -rf .git` and start with a new one:
+Or use the requirements.txt file:
 
 ```bash
-git init
-git add .
-git commit -m "initial commit"
-git branch -M main
+pip install -r requirements.txt
 ```
 
-### 4. Create Heroku project
+## 2. Download the Dataset
+
+Download the Chest X-Ray Pneumonia dataset from Kaggle:
+https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia
+
+Extract the folder so the path is:
+```
+app/model/chest_xray/chest_xray/
+├── test/
+├── train/
+└── val/
+```
+
+## 3. Download Pre-trained Model Weights
+
+Download the pre-trained DenseNet121 model weights:
+https://drive.google.com/file/d/1xeBS5xd0mklC3b0c0v1j0E4U2kgvmb/view
+
+Save as: `app/model/DenseNet121model_prototype.pth`
+
+## 4. Run the API
 
 ```bash
-heroku login
-heroku create your-app-name
-heroku git:remote your-app-name
-heroku stack:set container
-git push heroku main
+cd app/model
+uvicorn main:app --reload
 ```
+
+Then open http://localhost:8000 in your browser.
