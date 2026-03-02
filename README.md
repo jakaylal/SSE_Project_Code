@@ -34,7 +34,7 @@ https://drive.google.com/file/d/1xeBS5xd0mklC3b0c0v1j0E4U2kgvmb/view
 
 Save as: `app/model/DenseNet121model_prototype.pth`
 
-## 4. Run the API
+## 4. Run the API (Local)
 
 ```bash
 cd app/model
@@ -42,3 +42,20 @@ uvicorn main:app --reload
 ```
 
 Then open http://localhost:8000 in your browser.
+
+## 5. Run with Docker
+
+### Build the image:
+```bash
+docker build -t color-vision-api .
+```
+
+### Run the container:
+```bash
+docker run -v /path/to/chest_xray:/app/app/model/chest_xray \
+           -v /path/to/DenseNet121model_prototype.pth:/app/app/model/DenseNet121model_prototype.pth \
+           -p 8000:8000 \
+           color-vision-api
+```
+
+Replace `/path/to/` with the actual paths to your dataset and model files on your computer.
