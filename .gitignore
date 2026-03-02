@@ -14,8 +14,8 @@ __pycache__/
 # Dataset
 chest_xray/
 
-# Test images
-test_images/
+# Test images (uncomment to ignore)
+# test_images/
 
 # IDE
 .vscode/
