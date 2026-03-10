@@ -1,4 +1,4 @@
-GET http://localhost:3000/users/
+GET http://localhost:3000/users/69af7b123ea86c8d633158d5
 
 ###
 
@@ -14,9 +14,17 @@ Content-Disposition: form-data; name="name"
 
 Bob
 --hr-boundary
+Content-Disposition: form-data; name="height"
+
+180
+--hr-boundary
 Content-Disposition: form-data; name="weight"
 
 150
+--hr-boundary
+Content-Disposition: form-data; name="phone"
+
+5555554444
 --hr-boundary
 Content-Disposition: form-data; name="email"
 
