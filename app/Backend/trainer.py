@@ -8,18 +8,29 @@ import torchvision.transforms as transforms # Import transforms
 import torchvision.datasets as datasets # Import datasets
 import torchvision.models as models # Import models
 import numpy as np
+import os
 
-
-"""
-Before running this file, make sure to download the dataset and save it to app/model/chest_xray/chest_xray.
-The dataset can be found here: https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia
-
-"""
 
 class Trainer:
     def __init__(self):
         self.config = Config()
         self.transform = self.UpdateTransform()
+        self.create_dataset()
+
+        #Load pretrained ImageNet weights
+        self.model = models.densenet121(weights=models.DenseNet121_Weights.IMAGENET1K_V1)
+
+        self.device = self.checkDevice()
+        self.model = self.model.to(self.device)
+        
+        #Load your custom saved weights
+        if os.path.exists(self.config.SAVED_MODEL_PATH):
+            print(f"Loading custom weights from {self.config.SAVED_MODEL_PATH}")
+            self.model.load_state_dict(torch.load(self.config.SAVED_MODEL_PATH, weights_only=True,map_location=torch.device('cpu')))
+        else:
+            print(f"Custom weights not found at {self.config.SAVED_MODEL_PATH}, using pretrained ImageNet weights")
+
+
 
     """
     Used to transform images for training the model.
@@ -46,6 +57,7 @@ class Trainer:
         dataset (datasets): 3 variables for the datasets for each folder (train, test, val).
             uses the data paths and fixed_transform found in the config file.
     """
+
     def create_dataset(self):
         self.train_dataset = datasets.ImageFolder(root=self.config.TRAIN_PATH, transform=self.transform)
         self.val_dataset = datasets.ImageFolder(root=self.config.VAL_PATH, transform=self.config.fixed_transform)
@@ -65,17 +77,17 @@ class Trainer:
 
     """
     def checkDevice(self):
-        try:
-            import torch_xla.core.xla_model as xm # type: ignore
-            device = xm.xla_device()
-            print("Using TPU")
-        except ImportError:
-            if torch.cuda.is_available():
-                device = torch.device("cuda")
-                print("Using GPU")
-            else:
-                device = torch.device("cpu")
-                print("Using CPU")
+        # try:
+        #     import torch_xla.core.xla_model as xm # type: ignore
+        # except ImportError:    
+        #     device = xm.xla_device()
+        #     print("Using TPU")
+        if torch.cuda.is_available():
+            device = torch.device("cuda")
+            print("Using GPU")
+        else:
+            device = torch.device("cpu")
+            print("Using CPU")
         return device
 
 
@@ -91,10 +103,9 @@ class Trainer:
     def train_model(self):
         print(f"Training for {self.config.NUM_EPOCHS} epochs with learning rate {self.config.LEARNING_RATE}...")
 
-        self.model = models.densenet121(pretrained=True)
+
+        print("Creating datasets...")
         self.create_dataset()
-        self.device = self.checkDevice()
-        self.model = self.model.to(self.device)
 
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.config.LEARNING_RATE)

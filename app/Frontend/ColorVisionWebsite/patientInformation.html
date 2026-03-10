@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Information</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h1 {
+            font-size: 1.8rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #3498db;
+        }
+
+        .hero { 
+            background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); 
+            color:white; 
+            padding:4rem 1rem; 
+            text-align:center 
+        }
+        
+        .hero-content { 
+            max-width:1200px; 
+            margin:0 auto 
+        }
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+
+        .patients-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .patient-card {
+            background: #f8f9fa;
+            padding: 1.25rem;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(118,75,162,0.06);
+            border-left: 4px solid #667eea;
+        }
+
+        .patient-card h2 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>Pneumonia Detection</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="upload.html">Upload Image</a></li>
+                <li><a href="patientInformation.html">Patient Information</a></li>
+                <li><a href="history.html">History</a></li>
+                <li><a href="performance.html">Performance Measures</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Patient Records</h2>
+            <p>View and manage uploaded patient information and analysis results.</p>
+        </div>
+    </section>
+
+    <main>
+        <div class="container">
+            <div class="patients-container" id="patientsContainer">
+            </div>
+        </div>
+    </main>
+
+    <script>
+        (function renderPatients() {
+            const container = document.getElementById('patientsContainer');
+            const stored = localStorage.getItem('patients');
+            let patients = [];
+            try {
+                patients = stored ? JSON.parse(stored) : [];
+            } catch (err) {
+                console.warn('Could not parse patients from localStorage', err);
+                patients = [];
+            }
+
+            if (!patients || patients.length === 0) {
+                container.innerHTML = '<p>No patients found. Use the upload page to add patients.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            patients.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'patient-card';
+                card.innerHTML = `
+                    <h2>${escapeHtml(p.name || '-')}</h2>
+                    <p><strong>Age:</strong> ${escapeHtml(p.age || '-')}</p>
+                    <p><strong>Gender:</strong> ${escapeHtml(capitalize(p.gender) || '-')}</p>
+                    <p><strong>Weight:</strong> ${escapeHtml(p.weight ? p.weight + ' kg' : '-')}</p>
+                    <p><strong>Height:</strong> ${escapeHtml(p.height ? p.height + ' cm' : '-')}</p>
+                    <p><strong>Phone:</strong> ${escapeHtml(p.phone || '-')}</p>
+                    <p><strong>Email:</strong> ${escapeHtml(p.email || '-')}</p>
+                    
+                    <p><strong>Diagnosis:</strong> ${escapeHtml(p.prediction || '-') } (${escapeHtml(p.confidence ? p.confidence + '%' : '-')})</p>
+                    <p><strong>Upload Date:</strong> ${formatDate(p.uploadDate)}</p>
+                    ${p.image ? '<div style="margin-top:10px;text-align:center"><img src="' + p.image + '" alt="thumb" style="max-width:100%;max-height:160px;border-radius:6px;box-shadow:0 6px 12px rgba(0,0,0,0.06)"></div>' : ''}
+                `;
+                container.appendChild(card);
+            });
+
+            function formatDate(d) {
+                if (!d) return '-';
+                try { return new Date(d).toLocaleString(); } catch(e) { return d; }
+            }
+            function capitalize(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s }
+            function escapeHtml(str){
+                if (!str) return '';
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+        })();
+    </script>
+
+    <footer>
+        <p>&copy; 2026 ColorVision </p>
+    </footer>
+</body>
+</html>

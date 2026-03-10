@@ -1,17 +1,17 @@
 from fastapi import FastAPI, HTTPException, File, UploadFile
 from fastapi.responses import JSONResponse
-from trainer import Trainer 
+from app.Backend.trainer import Trainer 
 from display import Display as  display 
 from config import Config as config
 import torch
 
 
 def main():
-    print("""
-    Option 1: Train Model
-    Option 2: Test image
-    Option 3: Quit
-          """)
+    # print("""
+    # Option 1: Train Model
+    # Option 2: Test image
+    # Option 3: Quit
+    #       """)
     trainer = Trainer()
 
     option = '1'
