@@ -31,6 +31,10 @@ app/model/chest_xray/chest_xray/
 
 Download the pre-trained DenseNet121 model weights:
 https://drive.google.com/file/d/1xeBS5UDkdL99Xeqm12wx-j0E4U2kgvmb/view?usp=sharing
+<<<<<<< HEAD
+=======
+
+>>>>>>> cfa08b94dbb0c6cc6443c2d4d91ac31405fd6e24
 Save as: `app/model/DenseNet121model_prototype.pth`
 
 ## 4. Run the API (Local)

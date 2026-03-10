@@ -1,0 +1,15 @@
+Requirements:
+    Node.js
+    MongoDB (running locally)
+
+Installation:
+    npm install
+    
+How to start server:
+    npm run devstart
+
+Current Schema:
+    Name
+    Date of Birth
+    Email
+    Image
