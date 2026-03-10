@@ -1,0 +1,82 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+header{
+    background-color: #2c3e50;
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+nav{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav h1{
+    font-size: 1.8rem;
+}
+
+nav ul{
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+}
+
+nav a{
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+nav a:hover{
+    color: #3498db;
+}
+
+footer{
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 2rem 1rem;
+    margin-top: 3rem;
+}
+
+.status-hidden { display: none; }
+.status-success { color: green; font-weight: bold; }
+.status-error { color: red; font-style: italic; }
+
+.login-hidden { display: none !important; }
+.login-success { 
+    display: block !important; 
+    color: #2ecc71 !important;
+    font-weight: bold; 
+    background: rgba(255, 255, 255, 0.2); 
+}
+.login-failure { 
+    display: block !important; 
+    color: #ff7675 !important;
+    font-style: italic; 
+    background: rgba(255, 255, 255, 0.2); 
+}
+
+#loginStatus {
+    margin-top: 20px;
+    padding: 10px;
+    width: 100%;
+    min-height: 40px;
+    border-radius: 5px;
+    text-align: center;
+}
