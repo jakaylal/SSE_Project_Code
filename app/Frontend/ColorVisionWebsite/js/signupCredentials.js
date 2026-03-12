@@ -9,7 +9,7 @@ form.addEventListener('submit', async(e) => {
 
     try{
         //enter your ip below
-        const response = await fetch("http://YOUR_IP:3000/users", {
+        const response = await fetch("http://192.168.1.25:3000/users", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

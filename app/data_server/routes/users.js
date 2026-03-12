@@ -83,6 +83,7 @@ router.patch('/:id', getUser,async(req,res) => {
         res.status(400).json({message:err.message})
     }
 })
+
 //deleting one
 router.delete('/:id', getUser, async (req,res) => {
     try{

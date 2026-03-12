@@ -7,7 +7,7 @@ const mongoose = require('mongoose')
 
 app.use(cors({
     //enter the IP the webpage URL uses
-    origin: 'http://WEBPAGE_URL'
+    origin: 'http://127.0.0.1:5500'
 })) 
 app.use(express.json())
 

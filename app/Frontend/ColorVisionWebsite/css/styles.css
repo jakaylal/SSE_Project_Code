@@ -54,29 +54,43 @@ footer{
     margin-top: 3rem;
 }
 
+.btn:hover {
+    background-color: #2980b9;
+}
+
+.hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 1rem;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.get-started-btn {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
 .status-hidden { display: none; }
 .status-success { color: green; font-weight: bold; }
 .status-error { color: red; font-style: italic; }
 
-.login-hidden { display: none !important; }
-.login-success { 
-    display: block !important; 
-    color: #2ecc71 !important;
-    font-weight: bold; 
-    background: rgba(255, 255, 255, 0.2); 
-}
-.login-failure { 
-    display: block !important; 
-    color: #ff7675 !important;
-    font-style: italic; 
-    background: rgba(255, 255, 255, 0.2); 
-}
-
-#loginStatus {
-    margin-top: 20px;
-    padding: 10px;
-    width: 100%;
-    min-height: 40px;
-    border-radius: 5px;
-    text-align: center;
-}
