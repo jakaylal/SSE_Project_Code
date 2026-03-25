@@ -1,0 +1,24 @@
+.container {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+}
+
+.patients-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.patient-card {
+    background: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(118,75,162,0.06);
+    border-left: 4px solid #667eea;
+}
+
+.patient-card h2 {
+    margin-bottom: 0.5rem;
+    color: #333;
+}

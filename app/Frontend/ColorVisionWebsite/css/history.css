@@ -1,0 +1,84 @@
+.container { 
+    max-width:1200px; 
+    margin:3rem auto; 
+    padding:0 1rem 
+}
+
+.history-grid { 
+    display:grid; 
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+    gap:30px 
+}
+
+.history-card { 
+    background:white; 
+    border-radius:15px; 
+    overflow:hidden; 
+    box-shadow:0 10px 30px rgba(0,0,0,0.12); 
+    transition:transform 0.3s ease, box-shadow 0.3s ease 
+}
+
+.history-card:hover { 
+    transform:translateY(-5px); 
+    box-shadow:0 15px 40px rgba(0,0,0,0.16) 
+}
+
+.image-container { 
+    width:100%; height:250px; 
+    overflow:hidden; 
+    background:#f0f0f0 
+}
+
+.image-container img { 
+    width:100%; 
+    height:100%; 
+    object-fit:cover 
+}
+
+.card-content { 
+    padding:25px 
+}
+
+.patient-name { 
+    font-size:1.25rem; 
+    font-weight:700; 
+    color:#333; 
+    margin-bottom:12px 
+}
+
+.result-item { 
+    margin-bottom:12px 
+}
+
+.result-label { 
+    font-size:0.8rem; 
+    color:#666; 
+    font-weight:600; 
+    text-transform:uppercase; 
+    letter-spacing:0.5px; 
+    margin-bottom:6px 
+}
+
+.result-value { 
+    font-size:1.05rem; 
+    font-weight:700; 
+    color:#333 
+}
+
+.confidence-score { 
+    background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); 
+    color:white; 
+    padding:12px; 
+    border-radius:10px; 
+    text-align:center; 
+    margin-top:12px 
+}
+
+.no-history { 
+    text-align:center; 
+    color:#666; 
+    padding:40px; 
+    font-size:1.1em 
+}
+
+@media (max-width:768px) { .history-grid { grid-template-columns:1fr } .hero { padding:2rem 1rem } }
