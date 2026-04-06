@@ -9,12 +9,10 @@ form.addEventListener('submit', async(e) => {
 
     try{
         //enter your ip below
-        const response = await fetch("http://192.168.1.25:3000/users", {
+        // this is gonna cause some headaches on presentation day isn't it?
+        const response = await fetch("http://localhost:3000/api/patients/", {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
+            body: formData
         })
 
         if(response.ok){

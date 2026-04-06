@@ -1,6 +1,8 @@
+
+// there should be a better way of doing this
 const form = document.getElementById('uploadForm');
 const uploadArea = document.getElementById('uploadArea');
-const fileInput = document.getElementById('medicalImage');
+const fileInput = document.getElementById('image');
 const previewImg = document.getElementById('previewImg');
 const resultBadge = document.getElementById('resultBadge');
 const spinner = document.getElementById('spinner');
@@ -53,87 +55,43 @@ function handleFileSelect() {
     }
 }
 
-    
-analyzeBtn.addEventListener('click', function(e) {
-    console.log('Analyze button clicked');
+analyzeBtn.addEventListener('click', async function(e) {
 
+    e.preventDefault();
+    console.log("Fetching...");
     
-    const patientName = document.getElementById('patientName').value;
-    const dateOfBirth = document.getElementById('dateOfBirth').value;
-    const age = document.getElementById('age').value;
-    const gender = document.getElementById('gender').value;
-    const weight = document.getElementById('weight').value;
-    const height = document.getElementById('height').value;
-    const phone = document.getElementById('phone').value;
-    const email = document.getElementById('email').value;
+    const formData = new FormData(form);
 
-    if (!patientName || !dateOfBirth || !age || !gender || !weight || !height || !phone || !email || !previewImg.src) {
-        alert('Please fill in all fields and select an image');
+    if (!fileInput.files[0]) {
+        alert('Please select an image');
         return;
     }
 
-    console.log('All validation passed');
-
+    // UI Feedback
     spinner.style.display = 'inline-block';
     analyzeBtn.disabled = true;
-    resultBadge.style.display = 'none';
 
-    sessionStorage.setItem('patientName', patientName);
-    sessionStorage.setItem('patientDateOfBirth', dateOfBirth);
-    sessionStorage.setItem('patientAge', age);
-    sessionStorage.setItem('patientGender', gender);
-    sessionStorage.setItem('patientWeight', weight);
-    sessionStorage.setItem('patientHeight', height);
-    sessionStorage.setItem('patientPhone', phone);
-    sessionStorage.setItem('patientEmail', email);
-    sessionStorage.setItem('uploadImage', previewImg.src);
+    try {
+        const response = await fetch('http://localhost:3000/api/patients', {
+            method: 'POST', // or PATCH if updating an existing record
+            body: formData
+        });
 
-    console.log('Patient data stored in sessionStorage');
+        if (!response.ok) throw new Error('Upload failed');
 
-            
-    setTimeout(() => {
-        const predictions = ['Normal', 'Pneumonia'];
-        const prediction = predictions[Math.floor(Math.random() * predictions.length)];
-        const confidence = Math.floor(Math.random() * (95 - 60) + 60);
+        const savedPatient = await response.json();
+        
+        // storing the whole image in sessionStorage, 
+        // just store the ID of the new patient so the results page can fetch them
+        sessionStorage.setItem('lastPatientId', savedPatient._id);
 
-        sessionStorage.setItem('prediction', prediction);
-        sessionStorage.setItem('confidence', confidence);
-
-        const patientsKey = 'patients';
-        const existing = localStorage.getItem(patientsKey);
-        let patients = [];
-        try {
-            patients = existing ? JSON.parse(existing) : [];
-        } catch (err) {
-            console.warn('Failed to parse existing patients, resetting', err);
-            patients = [];
-        }
-
-        const newPatient = {
-            id: Date.now().toString(),
-            name: patientName,
-            dateOfBirth: dateOfBirth,
-            age: age,
-            gender: gender,
-            weight: weight,
-            height: height,
-            phone: phone,
-            email: email,
-            image: previewImg.src,
-            prediction: prediction,
-            confidence: confidence,
-            uploadDate: new Date().toISOString()
-        };
-
-        patients.unshift(newPatient);
-        try {
-            localStorage.setItem(patientsKey, JSON.stringify(patients));
-            console.log('Saved patient to localStorage, total=', patients.length);
-        } catch (err) {
-            console.error('Failed to save patients to localStorage', err);
-        }
-
-        console.log('Redirecting to results.html with prediction:', prediction);
+        console.log('Redirecting to results.html');
         window.location.href = 'results.html';
-    }, 1500);
+
+    } catch (err) {
+        console.error('Error:', err);
+        alert('Failed to save patient data: ' + err.message);
+        spinner.style.display = 'none';
+        analyzeBtn.disabled = false;
+    }
 });

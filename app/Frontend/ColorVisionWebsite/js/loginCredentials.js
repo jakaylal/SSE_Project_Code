@@ -9,17 +9,26 @@ form.addEventListener('submit', async (e) => {
 
     try {
         //enter your ip below
-        const response = await fetch('http://192.168.1.25:3000/users/login', {
+        //try localhost
+        const response = await fetch('http://localhost:3000/api/patients/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            credentials: 'include'
         });
 
         const result = await response.json();
 
         if (response.ok) {
             loginDiv.className = "login-success";
-            loginDiv.innerText = "Success: " + result.message;
+            loginDiv.innerText = "Success: Redirecting...";
+
+            setTimeout(() => {
+                // This forces the browser to look at your Live Server port, not the Express port
+                const frontendPort = "5500"; 
+                const host = window.location.hostname; // '127.0.0.1' or your IP
+                window.location.href = `patientInformation.html`;
+            }, 1000);
         } else {
             loginDiv.className = "login-failure";
             loginDiv.innerText = "Error: " + result.message;

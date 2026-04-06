@@ -1,3 +1,5 @@
+
+// i am still fighting the war against localStorage, the battle is long but a righteous one
 window.addEventListener('load', function() {
     const patientName = sessionStorage.getItem('patientName') || '-';
     const patientDateOfBirth = sessionStorage.getItem('patientDateOfBirth') || '-';
@@ -26,11 +28,14 @@ window.addEventListener('load', function() {
     }
 });
 
+
+// do we need this? its only used on one line or just put it with the code on that line
 function formatDate(dateStr) {
     if (!dateStr || dateStr === '-') return '-';
     const date = new Date(dateStr + 'T00:00:00');
     return date.toLocaleDateString();
 }
+
 
 function capitalizeFirst(str) {
     if (!str || str === '-') return '-';

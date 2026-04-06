@@ -16,6 +16,7 @@ function loadHistory() {
         return;
     }
 
+    //evil html invading my code
     container.innerHTML = historyData.map(record => `
         <div class="history-card">
             <div class="image-container">
@@ -37,6 +38,7 @@ function loadHistory() {
     `).join('');
 }
 
+// wtf is happening here
 function escapeHtml(str){ if (!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
 
 document.addEventListener('DOMContentLoaded', loadHistory);

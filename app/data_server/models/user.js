@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
         required: false
     },
     phone:{
-        type: Number,
+        type: String,
         required: false
     },
     email:{
@@ -39,6 +39,14 @@ const userSchema = new mongoose.Schema({
         required: false
     },
     imagePath:{
+        type: String,
+        required: false
+    },
+    image: {
+        data: { type: Buffer },
+        contentType: { type: String }
+    },
+    results:{
         type: String,
         required: false
     }
