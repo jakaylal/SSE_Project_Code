@@ -1,6 +1,6 @@
 
-// i am still fighting the war against localStorage, the battle is long but a righteous one
 window.addEventListener('load', function() {
+    //call the API on name,dob,age,etc...everyything except the model metrics which should come from the model server
     const patientName = sessionStorage.getItem('patientName') || '-';
     const patientDateOfBirth = sessionStorage.getItem('patientDateOfBirth') || '-';
     const patientAge = sessionStorage.getItem('patientAge') || '-';

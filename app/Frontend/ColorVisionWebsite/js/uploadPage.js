@@ -1,5 +1,4 @@
 
-// there should be a better way of doing this
 const form = document.getElementById('uploadForm');
 const uploadArea = document.getElementById('uploadArea');
 const fileInput = document.getElementById('image');
@@ -55,6 +54,7 @@ function handleFileSelect() {
     }
 }
 
+
 analyzeBtn.addEventListener('click', async function(e) {
 
     e.preventDefault();
@@ -83,8 +83,10 @@ analyzeBtn.addEventListener('click', async function(e) {
         
         // storing the whole image in sessionStorage, 
         // just store the ID of the new patient so the results page can fetch them
+        // double check if this is still needed
         sessionStorage.setItem('lastPatientId', savedPatient._id);
 
+        //redirects have been acting funky test this to make sure it works properly
         console.log('Redirecting to results.html');
         window.location.href = 'results.html';
 

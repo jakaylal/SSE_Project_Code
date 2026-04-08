@@ -1,3 +1,6 @@
+//maybe delete this webpage not sure what the goal is since this info should be displayed
+//on the patient info page
+
 let patients = [];
 try { patients = JSON.parse(localStorage.getItem('patients') || '[]'); } catch(e) { patients = []; }
 
@@ -16,7 +19,6 @@ function loadHistory() {
         return;
     }
 
-    //evil html invading my code
     container.innerHTML = historyData.map(record => `
         <div class="history-card">
             <div class="image-container">

@@ -1,3 +1,8 @@
+//2xx = success
+//3xx = redirect
+//4xx = client error
+//5xx = server error
+
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const express = require('express')
@@ -5,6 +10,7 @@ const router = express.Router()
 const User = require('../models/user')
 const SECRET_KEY = "436a1111bed35e788d0b15e3d2157174e1c209edf1758aa2ca3b875f26fb2cb1" //VERY IMPORTANT DO NOT CHANGE 
 
+//IMPORTANT MIDDLEWARE for image storage as binary data
 const multer = require('multer')
 const storage = multer.memoryStorage();
 const upload = multer({ 
@@ -12,19 +18,7 @@ const upload = multer({
     limits: { fileSize: 16 * 1024 * 1024 } // Optional: 16MB limit for MongoDB
 });
 
-const authenticateToken = (req, res, next) => {
-    const token = req.cookies.token;
-    if (!token) return res.status(401).send("Access Denied");
-    try {
-        const verified = jwt.verify(token, SECRET_KEY);
-        req.user = verified;
-        next();
-    } catch (err) {
-        res.status(400).send("Invalid Token");
-    }
-};
-
-// Getting all
+// Get all users
 router.get('/', async (req,res) => {
     try{
         const users = await User.find()
@@ -33,7 +27,8 @@ router.get('/', async (req,res) => {
         res.status(500).json({message: err.message})
     }
 })
-//Getting one
+
+// Get specific user
 router.get('/:id', getUser,(req, res) => {
     res.json(res.user)
 })
@@ -45,7 +40,7 @@ router.get('/details', async (req, res) => {
         return res.status(401).json({ message: "No token provided" });
     }
     try {
-        const decoded = jwt.verify(token, process.env.SECRET_KEY || 'YOUR_SECRET_KEY');   
+        const decoded = jwt.verify(token, process.env.SECRET_KEY || SECRET_KEY);   
         const user = await User.findById(decoded.userId);
 
         if (!user) return res.status(404).json({ message: "User not found" });
@@ -59,27 +54,9 @@ router.get('/details', async (req, res) => {
     }
 });
 
-//creating one
-//not sure if i still need this yet
-/*router.post('/',async (req,res) => {
-    const user = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        phone: req.body.phone,
-        username: req.body.username,
-        password: req.body.password,
-        image: req.body.image  //might not need this for post but instead for patch
-    })
-    try{
-        const newUser = await user.save()
-        res.status(201).json(newUser)
-    }catch(err){
-        res.status(400).json({message: err.message})
-    }
-})*/
-
 //might add back the commented out fields later
+//didn't keep image because when you create an account you are not immediately uploading an image
+//use PATCH to update the account with image
 router.post('/', upload.single('image'), async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -136,26 +113,6 @@ router.post('/login', async (req,res) => {
     }
 })
 
-//updating one FIX THIS
-//ive yet to try and fix this
-/*router.patch('/:id', getUser,async(req,res) => {
-    try{
-        const updatedUser = await User.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {new: true, runValidators: true}
-        );
-
-        if (!updatedUser){
-            return res.status(404).json({message: 'User not found'})
-        }
-
-        res.json(updatedUser);
-    }catch(err){
-        res.status(400).json({message:err.message})
-    }
-})*/
-
 router.patch('/:id', upload.single('image'), async (req, res) => {
     try {
         //copies the fields provided
@@ -206,6 +163,18 @@ async function getUser(req,res,next){
     res.user = user
     next()
 }
+
+const authenticateToken = (req, res, next) => {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).send("Access Denied");
+    try {
+        const verified = jwt.verify(token, SECRET_KEY);
+        req.user = verified;
+        next();
+    } catch (err) {
+        res.status(400).send("Invalid Token");
+    }
+};
 
 //IMPORTANT MIDDLEWARE to check credentials
 router.get('/details', authenticateToken, (req, res) => {

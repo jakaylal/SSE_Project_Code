@@ -6,6 +6,7 @@ async function authorizePage() {
         const userData = await authRes.json();
         
         const welcomeElem = document.getElementById('welcome-message');
+        //get rid of "user" when we have successsfully updated the renderPatients function
         if (welcomeElem) welcomeElem.innerText = "Welcome, " + (userData.userId || "User");
 
         const patientsRes = await fetch('http://localhost:3000/api/patients', {
@@ -21,10 +22,14 @@ async function authorizePage() {
 
 window.onload = authorizePage;
 
+//take the patients account as a parameter most likely to fix nothing showing up
+//with the account id we can get the data in order to display it, otherwise nothing appears despite passing authroization
 function renderPatients(data) {
     const container = document.getElementById('patientsContainer');
     let patients = data || [];
 
+    //TODO: change this to check the api for patient info and the message is irrelevant since this page is only accessed
+    //after account creation
     if (!patients || patients.length === 0) {
         container.innerHTML = '<p>No patients found. Use the upload page to add patients.</p>';
         return;

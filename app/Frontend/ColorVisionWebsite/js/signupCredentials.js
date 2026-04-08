@@ -4,12 +4,13 @@ form.addEventListener('submit', async(e) => {
     e.preventDefault()
 
     const formData = new FormData(form)
+    //keep this for now might need this later
     const data = Object.fromEntries(formData.entries())
     const submitDiv = document.getElementById('submitStatus');
 
     try{
-        //enter your ip below
         // this is gonna cause some headaches on presentation day isn't it?
+        //changed all ips to localhost, if server doesn't load change back to ip
         const response = await fetch("http://localhost:3000/api/patients/", {
             method: 'POST',
             body: formData

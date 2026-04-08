@@ -1,5 +1,10 @@
 const mongoose = require('mongoose')
 
+//this schema doesn't account for multiple results, dates, and images atm
+// Create another schema based around an image that contains the images,acc_result, result, date
+// In the new schema the image will be required
+// resultSchema will be the name most likely
+// The user schema will then hold this schema 
 const userSchema = new mongoose.Schema({
     firstName:{
         type: String,
