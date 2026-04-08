@@ -1,5 +1,8 @@
 # Old files
 Old/
+*.zip
+*.tar.gz
+archive/
 
 # Python
 __pycache__/
@@ -24,3 +27,8 @@ chest_xray/
 # OS
 .DS_Store
 Thumbs.db
+.env
+node_modules
+
+# Kaggle
+kaggle.json
