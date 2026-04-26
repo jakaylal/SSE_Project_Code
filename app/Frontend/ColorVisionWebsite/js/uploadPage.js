@@ -56,43 +56,48 @@ function handleFileSelect() {
 
 
 analyzeBtn.addEventListener('click', async function(e) {
-
     e.preventDefault();
-    console.log("Fetching...");
     
-    const formData = new FormData(form);
-
     if (!fileInput.files[0]) {
         alert('Please select an image');
         return;
     }
 
-    // UI Feedback
     spinner.style.display = 'inline-block';
     analyzeBtn.disabled = true;
 
     try {
-        const response = await fetch('http://localhost:3000/api/patients', {
-            method: 'POST', // or PATCH if updating an existing record
-            body: formData
+        const authRes = await fetch('http://localhost:3000/api/patients/details', { 
+            credentials: 'include' 
+        });
+        
+        if (!authRes.ok) throw new Error('You must be logged in to upload');
+        const userData = await authRes.json();
+        const userId = userData.userId || userData._id || userData.id;
+
+        if (!userId) {
+            alert("Error: User session expired. Please log in again.");
+            window.location.href = 'loginCredentials.html';
+            return;
+        }   
+
+        const formData = new FormData(form);
+        // append the prediction here using the ML server api
+
+        const response = await fetch(`http://localhost:3000/api/results/${userId}`, {
+            method: 'POST',
+            body: formData,
+            credentials: 'include' 
         });
 
         if (!response.ok) throw new Error('Upload failed');
 
-        const savedPatient = await response.json();
-        
-        // storing the whole image in sessionStorage, 
-        // just store the ID of the new patient so the results page can fetch them
-        // double check if this is still needed
-        sessionStorage.setItem('lastPatientId', savedPatient._id);
-
-        //redirects have been acting funky test this to make sure it works properly
-        console.log('Redirecting to results.html');
+        const resultData = await response.json();
         window.location.href = 'results.html';
 
     } catch (err) {
         console.error('Error:', err);
-        alert('Failed to save patient data: ' + err.message);
+        alert('Upload Error: ' + err.message);
         spinner.style.display = 'none';
         analyzeBtn.disabled = false;
     }

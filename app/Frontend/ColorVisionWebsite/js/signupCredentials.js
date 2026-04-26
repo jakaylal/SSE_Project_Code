@@ -9,8 +9,6 @@ form.addEventListener('submit', async(e) => {
     const submitDiv = document.getElementById('submitStatus');
 
     try{
-        // this is gonna cause some headaches on presentation day isn't it?
-        //changed all ips to localhost, if server doesn't load change back to ip
         const response = await fetch("http://localhost:3000/api/patients/", {
             method: 'POST',
             body: formData

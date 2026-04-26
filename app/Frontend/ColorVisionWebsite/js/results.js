@@ -1,43 +1,67 @@
+window.addEventListener('load', async function() {
+    try {
+        // 1. Get User Session
+        const authRes = await fetch('http://localhost:3000/api/patients/details', { 
+            credentials: 'include' 
+        });
+        
+        if (!authRes.ok) {
+            window.location.href = 'loginCredentials.html';
+            return;
+        }
 
-window.addEventListener('load', function() {
-    //call the API on name,dob,age,etc...everyything except the model metrics which should come from the model server
-    const patientName = sessionStorage.getItem('patientName') || '-';
-    const patientDateOfBirth = sessionStorage.getItem('patientDateOfBirth') || '-';
-    const patientAge = sessionStorage.getItem('patientAge') || '-';
-    const patientGender = sessionStorage.getItem('patientGender') || '-';
-    const patientWeight = sessionStorage.getItem('patientWeight') || '-';
-    const patientHeight = sessionStorage.getItem('patientHeight') || '-';
-    const uploadImage = sessionStorage.getItem('uploadImage');
-    const prediction = sessionStorage.getItem('prediction') || 'Pending';
-    const confidence = sessionStorage.getItem('confidence') || '0';
+        const userData = await authRes.json();
+        const userId = userData.userId || userData._id;
 
-    document.getElementById('patientName').textContent = patientName;
-    document.getElementById('patientDateOfBirth').textContent = formatDate(patientDateOfBirth);
-    document.getElementById('patientAge').textContent = patientAge;
-    document.getElementById('patientGender').textContent = capitalizeFirst(patientGender);
-    document.getElementById('patientWeight').textContent = patientWeight ? patientWeight + ' kg' : '-';
-    document.getElementById('patientHeight').textContent = patientHeight ? patientHeight + ' cm' : '-';
-    document.getElementById('uploadDate').textContent = new Date().toLocaleDateString();
-    document.getElementById('predictionResult').textContent = prediction;
-    document.getElementById('confidenceScore').textContent = confidence;
-    document.getElementById('confidenceFill').style.width = confidence + '%';
+        // get results for specific user
+        const resultsRes = await fetch(`http://localhost:3000/api/results/${userId}`, {
+            credentials: 'include'
+        });
+        const results = await resultsRes.json();
 
-    if (uploadImage) {
-        document.getElementById('originalImage').src = uploadImage;
-        document.getElementById('analysisImage').src = uploadImage;
+        if (!results || results.length === 0) {
+            console.warn("No scan history found.");
+            return;
+        }
+
+        // gets most recent scan
+        const latestResult = results[results.length - 1];
+
+        // TODO: ML server API goes here
+        // send 'latestResult.image' to FastAPI server.
+        // after image is analyzed, 
+        // set: document.getElementById('analysisImage').src = aiImageUri;
+
+        // update text fields 
+        // add ML model prediction results are here need to make sure its correct
+        document.getElementById('uploadDate').textContent = new Date(latestResult.date).toLocaleDateString();
+        document.getElementById('predictionResult').textContent = latestResult.prediction;
+
+        // renders the original image for its card
+        if (latestResult.image && latestResult.image.data) {
+            const rawBuffer = latestResult.image.data.data || latestResult.image.data;
+            
+            // fix for "Maximum call stack size exceeded"
+            const blob = new Blob([new Uint8Array(rawBuffer)], { 
+                type: latestResult.image.contentType || 'image/png' 
+            });
+
+            const imageUrl = URL.createObjectURL(blob);
+
+            const originalImg = document.getElementById('originalImage');
+            if (originalImg) originalImg.src = imageUrl;
+            
+            // analysis image is blank need to add back once i get the ML server api
+            console.log("Original image loaded. Analysis visualization pending ML integration.");
+        }
+
+    } catch (err) {
+        console.error("Results Logic Error:", err);
     }
 });
 
-
-// do we need this? its only used on one line or just put it with the code on that line
+// keep this helper for use in other parts of the app
 function formatDate(dateStr) {
-    if (!dateStr || dateStr === '-') return '-';
-    const date = new Date(dateStr + 'T00:00:00');
-    return date.toLocaleDateString();
-}
-
-
-function capitalizeFirst(str) {
-    if (!str || str === '-') return '-';
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    if (!dateStr) return '-';
+    return new Date(dateStr).toLocaleDateString();
 }

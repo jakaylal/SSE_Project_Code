@@ -1,6 +1,3 @@
-//page is done seems to be working when i test it both correct and incorrect logins
-//there is no limit on login attempts tho
-
 const form = document.getElementById('form');
 const loginDiv = document.getElementById('loginStatus');
 
@@ -11,8 +8,6 @@ form.addEventListener('submit', async (e) => {
     const data = Object.fromEntries(formData.entries());
 
     try {
-        //enter your ip below
-        //try localhost for now
         const response = await fetch('http://localhost:3000/api/patients/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -27,9 +22,8 @@ form.addEventListener('submit', async (e) => {
             loginDiv.innerText = "Success: Redirecting...";
 
             setTimeout(() => {
-                // This forces the browser to look at your Live Server port, not the Express port
                 const frontendPort = "5500"; 
-                const host = window.location.hostname; // '127.0.0.1' or your IP
+                const host = window.location.hostname;
                 window.location.href = `patientInformation.html`;
             }, 1000);
         } else {

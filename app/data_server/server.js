@@ -14,7 +14,7 @@ app.use((req, res, next) => {
 
 //security + parsing
 app.use(cors({
-    origin: 'http://127.0.0.1:5500', 
+    origin: 'http://localhost:5500', 
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization','Cookie'],
     credentials: true //added this could cause problems check back later
@@ -33,6 +33,8 @@ db.once('open', () => console.log('Connected to Database'))
 
 //routes
 const usersRouter = require('./routes/users')
+const resultRouter = require('./routes/results')
 app.use('/api/patients', usersRouter)
+app.use('/api/results', resultRouter)
 
 app.listen(3000, '0.0.0.0', () => console.log('Server running on port 3000 and accessible via network'));

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/performance.css">
+    <script src="js/navBar.js" defer></script>
     <title>Performance Metrics</title>
 </head>
 <body>
@@ -13,10 +14,12 @@
             <h1>Pneumonia Detection</h1>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="upload.html">Upload Image</a></li>
-                <li><a href="patientInformation.html">Patient Information</a></li>
-                <li><a href="history.html">History</a></li>
-                <li><a href="performance.html">Performance Measures</a></li>
+                <li id="authStatus"><a href="loginCredentials.html">Sign In</a></li>
+                <!--the 2 below should only show if the user is signed in to an account-->
+                <!--the top bar is inconsistent throughout other pages as well-->
+                <li class = "authOnly" ><a href="upload.html">Upload Image</a></li>
+                <li class = "authOnly"><a href="results.html">Results</a></li>
+                <li class = "authOnly"><a href="patientInformation.html">Info</a></li>
             </ul>
         </nav>
     </header>

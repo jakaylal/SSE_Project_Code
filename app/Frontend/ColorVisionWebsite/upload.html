@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/upload.css">
     <script src="js/uploadPage.js" defer></script>
+    <script src="js/navBar.js" defer></script>
     <title>Upload Patient Data - Pneumonia Detection</title>
 </head>
 <body>
@@ -14,9 +15,12 @@
             <h1>Pneumonia Detection</h1>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="patientInformation.html">Patient Information</a></li>
-                <li><a href="history.html">History</a></li>
-                <li><a href="performance.html">Performance Measures</a></li>
+                <li id="authStatus"><a href="loginCredentials.html">Sign In</a></li>
+                <!--the 2 below should only show if the user is signed in to an account-->
+                <!--the top bar is inconsistent throughout other pages as well-->
+                <li class = "authOnly" ><a href="upload.html">Upload Image</a></li>
+                <li class = "authOnly"><a href="results.html">Results</a></li>
+                <li class = "authOnly"><a href="patientInformation.html">Info</a></li>
             </ul>
         </nav>
     </header>
@@ -31,53 +35,6 @@
     <div class="container">
         <div class="form-section">
             <form id="uploadForm" method="POST" enctype="multipart/form-data">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="patientName">Patient Name*</label>
-                        <input type="text" id="patientName" name="patientName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="dateOfBirth">Date of Birth*</label>
-                        <input type="date" id="dateOfBirth" name="dateOfBirth" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="age">Age*</label>
-                        <input type="number" id="age" name="age" step="1" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="gender">Gender*</label>
-                        <select  type="options" id="gender" name="gender" required>
-                            <option value="">Select Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="weight">Weight (kg)*</label>
-                        <input type="number" id="weight" name="weight" step="1.0" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="height">Height (cm)*</label>
-                        <input type="number" id="height" name="height" step="1.0" min="0" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="phone">Phone Number*</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email Address*</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                </div>
-
                 <div class="form-group">
                     <label for="image">Medical Image (X-ray)*</label>
                     <div class="upload-area" id="uploadArea">

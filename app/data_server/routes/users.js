@@ -9,8 +9,6 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/user')
 const SECRET_KEY = "436a1111bed35e788d0b15e3d2157174e1c209edf1758aa2ca3b875f26fb2cb1" //VERY IMPORTANT DO NOT CHANGE 
-
-//IMPORTANT MIDDLEWARE for image storage as binary data
 const multer = require('multer')
 const storage = multer.memoryStorage();
 const upload = multer({ 
@@ -28,11 +26,6 @@ router.get('/', async (req,res) => {
     }
 })
 
-// Get specific user
-router.get('/:id', getUser,(req, res) => {
-    res.json(res.user)
-})
-
 // Authorization Route
 router.get('/details', async (req, res) => {
     const token = req.cookies.token; 
@@ -45,14 +38,32 @@ router.get('/details', async (req, res) => {
 
         if (!user) return res.status(404).json({ message: "User not found" });
         res.status(200).json({ 
-            userId: user.username, 
+            userId: user._id,
             firstName: user.firstName,
-            email: user.email 
+            username: user.username,
+            email: user.email
         });
     } catch (err) {
         res.status(401).json({ message: "Invalid token" });
     }
 });
+
+router.get('/logout', (req, res) => {
+    res.clearCookie('token', {
+        path: '/',
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false
+    });
+    res.status(200).send({ message: "Logged out successfully" });
+});
+
+// Get specific user
+router.get('/:id', getUser,(req, res) => {
+    res.json(res.user)
+})
+
+
 
 //might add back the commented out fields later
 //didn't keep image because when you create an account you are not immediately uploading an image
@@ -64,17 +75,10 @@ router.post('/', upload.single('image'), async (req, res) => {
         const newPatient = new User({
             firstName: req.body.firstName, 
             lastName: req.body.lastName,
-            //dob: req.body.dateOfBirth,
-            //weight: req.body.weight,
-            //height: req.body.height,
             phone: req.body.phone,
             email: req.body.email,
             username: req.body.username,
             password: hashedPassword,
-            /*image: req.file ? {
-                data: req.file.buffer,
-                contentType: req.file.mimetype
-            } : undefined*/
         });
 
         const savedPatient = await newPatient.save();
@@ -100,9 +104,10 @@ router.post('/login', async (req,res) => {
             //token sent as an http cookie
             res.cookie('token', token, {
                 httpOnly: true,   
-                secure: false,     //set to true if using HTTPS
-                sameSite: 'lax',//protects against CSRF
-                maxAge: 7200000    //2hr limit on login
+                secure: false,  
+                sameSite: 'lax',
+                maxAge: 7200000,   
+                path: '/'
             })
             res.status(200).json({ message: "Login successful" });
         }else {
@@ -113,6 +118,7 @@ router.post('/login', async (req,res) => {
     }
 })
 
+// update specific user info
 router.patch('/:id', upload.single('image'), async (req, res) => {
     try {
         //copies the fields provided
@@ -127,7 +133,7 @@ router.patch('/:id', upload.single('image'), async (req, res) => {
         }
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
-            { $set: updateFields }, // Use $set to only update what's provided
+            { $set: updateFields },
             { new: true, runValidators: true }
         )
         if (!updatedUser) {
@@ -176,7 +182,7 @@ const authenticateToken = (req, res, next) => {
     }
 };
 
-//IMPORTANT MIDDLEWARE to check credentials
+//middleware to check token credentials
 router.get('/details', authenticateToken, (req, res) => {
     // 401 error if token is invalid
     // else the below code runs

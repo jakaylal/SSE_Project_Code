@@ -1,60 +1,27 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-//this schema doesn't account for multiple results, dates, and images atm
-// Create another schema based around an image that contains the images,acc_result, result, date
-// In the new schema the image will be required
-// resultSchema will be the name most likely
-// The user schema will then hold this schema 
-const userSchema = new mongoose.Schema({
-    firstName:{
-        type: String,
-        required: false
-    },
-    lastName:{
-        type: String,
-        required: false
-    },
-    dob:{
-        type: Date,
-        required: false,
-        default: Date.now
-    },
-    weight:{
-        type: Number,
-        required: false
-    },
-    height:{
-        type: Number,
-        required: false
-    },
-    phone:{
-        type: String,
-        required: false
-    },
-    email:{
-        type: String,
-        required: false
-    },
-    username:{
-        type: String,
-        required: false
-    },
-    password:{
-        type: String,
-        required: false
-    },
-    imagePath:{
-        type: String,
-        required: false
-    },
+const resultSchema = new mongoose.Schema({
     image: {
-        data: { type: Buffer },
-        contentType: { type: String }
+        data: Buffer,
+        contentType: String
     },
-    results:{
-        type: String,
-        required: false
-    }
-})
+    prediction: { type: String, required: true },
+    date: { type: Date, required: false, default: Date.now }
+});
 
-module.exports = mongoose.model('User', userSchema)
+const userSchema = new mongoose.Schema({
+    firstName: { type: String, required: false },
+    lastName: { type: String, required: false },
+    phone: { type: String, required: false },
+    email: { type: String, required: false },
+    username: { type: String, required: false },
+    password: { type: String, required: false },
+    imagePath: { type: String, required: false }, 
+    image: {
+        data: Buffer,
+        contentType: String
+    },
+    results: [resultSchema] 
+});
+
+module.exports = mongoose.model('User', userSchema);

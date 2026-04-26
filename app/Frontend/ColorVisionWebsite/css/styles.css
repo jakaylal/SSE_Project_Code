@@ -4,6 +4,14 @@
     box-sizing: border-box;
 }
 
+.authOnly {
+    display: none;
+}
+
+.authOnly.show-me {
+    display: list-item !important;
+}
+
 body{
     font-family: Arial, sans-serif;
     line-height: 1.6;
