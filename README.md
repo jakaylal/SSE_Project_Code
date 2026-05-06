@@ -31,10 +31,7 @@ app/model/chest_xray/chest_xray/
 
 Download the pre-trained DenseNet121 model weights:
 https://drive.google.com/file/d/1xeBS5UDkdL99Xeqm12wx-j0E4U2kgvmb/view?usp=sharing
-<<<<<<< HEAD
-=======
 
->>>>>>> cfa08b94dbb0c6cc6443c2d4d91ac31405fd6e24
 Save as: `app/model/DenseNet121model_prototype.pth`
 
 ## 4. Run the API (Local)
@@ -46,19 +43,20 @@ uvicorn main:app --reload
 
 Then open http://localhost:8000 in your browser.
 
-## 5. Run with Docker (Still testing this)
 
-### Build the image:
-```bash
-docker build -t color-vision-api .
+## 5. Setup and Run Data Server
+Install required tools:
+- Node.js
+- npm
+- MongoDB (local instance must be running)
+
+Install dependencies:
+```
+npm install
 ```
 
-### Run the container:
-```bash
-docker run -v /path/to/chest_xray:/app/app/model/chest_xray \
-           -v /path/to/DenseNet121model_prototype.pth:/app/app/model/DenseNet121model_prototype.pth \
-           -p 8000:8000 \
-           color-vision-api
+Start the data server:
 ```
-
-Replace `/path/to/` with the actual paths to your dataset and model files on your computer.
+cd data_server
+npm run devstart
+```
